@@ -1,0 +1,173 @@
+DigitalClinic/
+│
+├── src/main/java/
+│   └── com/digitalclinic/
+│       │
+│       ├── model/              # Entités JPA
+│       │   ├── Person.java (abstract)
+│       │   ├── User.java
+│       │   ├── Patient.java
+│       │   ├── Doctor.java
+│       │   ├── Admin.java
+│       │   ├── Department.java
+│       │   ├── Room.java
+│       │   ├── Appointment.java
+│       │   ├── Role.java
+│       │   └── enums/
+│       │       ├── AppointmentStatus.java
+│       │       └── RoleType.java
+│       │
+│       ├── repository/         # Couche d'accès aux données
+│       │   ├── interfaces/
+│       │   │   ├── IUserRepository.java
+│       │   │   ├── IPatientRepository.java
+│       │   │   ├── IDoctorRepository.java
+│       │   │   ├── IAdminRepository.java
+│       │   │   ├── IDepartmentRepository.java
+│       │   │   ├── IRoomRepository.java
+│       │   │   ├── IAppointmentRepository.java
+│       │   │   └── IRoleRepository.java
+│       │   │
+│       │   └── impl/
+│       │       ├── UserRepositoryImpl.java
+│       │       ├── PatientRepositoryImpl.java
+│       │       ├── DoctorRepositoryImpl.java
+│       │       ├── AdminRepositoryImpl.java
+│       │       ├── DepartmentRepositoryImpl.java
+│       │       ├── RoomRepositoryImpl.java
+│       │       ├── AppointmentRepositoryImpl.java
+│       │       └── RoleRepositoryImpl.java
+│       │
+│       ├── service/            # Logique métier
+│       │   ├── interfaces/
+│       │   │   ├── IAuthService.java
+│       │   │   ├── IPatientService.java
+│       │   │   ├── IDoctorService.java
+│       │   │   ├── IAdminService.java
+│       │   │   ├── IAppointmentService.java
+│       │   │   ├── IDepartmentService.java
+│       │   │   ├── IRoomService.java
+│       │   │   └── IStatisticsService.java
+│       │   │
+│       │   └── impl/
+│       │       ├── AuthServiceImpl.java
+│       │       ├── PatientServiceImpl.java
+│       │       ├── DoctorServiceImpl.java
+│       │       ├── AdminServiceImpl.java
+│       │       ├── AppointmentServiceImpl.java
+│       │       ├── DepartmentServiceImpl.java
+│       │       ├── RoomServiceImpl.java
+│       │       └── StatisticsServiceImpl.java
+│       │
+│       ├── controller/         # Servlets (Contrôleurs)
+│       │   ├── auth/
+│       │   │   ├── LoginServlet.java
+│       │   │   ├── RegisterServlet.java
+│       │   │   └── LogoutServlet.java
+│       │   │
+│       │   ├── patient/
+│       │   │   ├── PatientDashboardServlet.java
+│       │   │   ├── PatientAppointmentServlet.java
+│       │   │   ├── PatientHistoryServlet.java
+│       │   │   └── PatientProfileServlet.java
+│       │   │
+│       │   ├── doctor/
+│       │   │   ├── DoctorDashboardServlet.java
+│       │   │   ├── DoctorPlanningServlet.java
+│       │   │   ├── DoctorAppointmentServlet.java
+│       │   │   └── DoctorConsultationServlet.java
+│       │   │
+│       │   └── admin/
+│       │       ├── AdminDashboardServlet.java
+│       │       ├── AdminDepartmentServlet.java
+│       │       ├── AdminDoctorServlet.java
+│       │       ├── AdminRoomServlet.java
+│       │       ├── AdminAppointmentServlet.java
+│       │       └── AdminStatisticsServlet.java
+│       │
+│       ├── filter/             # Filtres de sécurité
+│       │   ├── AuthenticationFilter.java
+│       │   ├── AuthorizationFilter.java
+│       │   └── SessionFilter.java
+│       │
+│       ├── util/               # Classes utilitaires
+│       │   ├── JPAUtil.java
+│       │   ├── PasswordUtil.java
+│       │   ├── DateTimeUtil.java
+│       │   └── ValidationUtil.java
+│       │
+│       └── exception/          # Exceptions personnalisées
+│           ├── AppointmentException.java
+│           ├── RoomNotAvailableException.java
+│           ├── UserNotFoundException.java
+│           └── ValidationException.java
+│
+├── src/main/resources/
+│   ├── META-INF/
+│   │   └── persistence.xml     # Configuration JPA
+│   └── database/
+│       └── schema.sql          # Script de création de la BD
+│
+├── src/main/webapp/
+│   ├── WEB-INF/
+│   │   ├── web.xml            # Configuration des Servlets
+│   │   │
+│   │   └── views/             # Pages JSP
+│   │       ├── common/
+│   │       │   ├── header.jsp
+│   │       │   ├── footer.jsp
+│   │       │   └── navbar.jsp
+│   │       │
+│   │       ├── auth/
+│   │       │   ├── login.jsp
+│   │       │   └── register.jsp
+│   │       │
+│   │       ├── patient/
+│   │       │   ├── dashboard.jsp
+│   │       │   ├── doctors-list.jsp
+│   │       │   ├── book-appointment.jsp
+│   │       │   ├── my-appointments.jsp
+│   │       │   └── history.jsp
+│   │       │
+│   │       ├── doctor/
+│   │       │   ├── dashboard.jsp
+│   │       │   ├── planning.jsp
+│   │       │   ├── appointments.jsp
+│   │       │   ├── consultation.jsp
+│   │       │   └── patient-history.jsp
+│   │       │
+│   │       ├── admin/
+│   │       │   ├── dashboard.jsp
+│   │       │   ├── departments.jsp
+│   │       │   ├── doctors.jsp
+│   │       │   ├── rooms.jsp
+│   │       │   ├── appointments.jsp
+│   │       │   └── statistics.jsp
+│   │       │
+│   │       └── error/
+│   │           ├── 404.jsp
+│   │           └── 500.jsp
+│   │
+│   ├── assets/
+│   │   ├── css/
+│   │   │   └── style.css
+│   │   ├── js/
+│   │   │   ├── main.js
+│   │   │   └── validation.js
+│   │   └── images/
+│   │
+│   └── index.jsp              # Page d'accueil
+│
+├── src/test/java/
+│   └── com/digitalclinic/
+│       ├── service/
+│       │   ├── AuthServiceTest.java
+│       │   ├── AppointmentServiceTest.java
+│       │   └── RoomServiceTest.java
+│       │
+│       └── repository/
+│           ├── PatientRepositoryTest.java
+│           └── AppointmentRepositoryTest.java
+│
+├── pom.xml                    # Dépendances Maven
+└── README.md
