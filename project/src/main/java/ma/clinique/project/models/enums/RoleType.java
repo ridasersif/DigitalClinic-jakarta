@@ -1,4 +1,7 @@
 package ma.clinique.project.models.enums;
 
-public enum TypeUtilisateur {
+public enum RoleType {
+    PATIENT,
+    DOCTOR,
+    ADMIN
 }
