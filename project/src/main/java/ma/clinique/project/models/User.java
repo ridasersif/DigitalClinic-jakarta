@@ -2,12 +2,12 @@ package ma.clinique.project.models;
 
 
 import jakarta.persistence.*;
-
 @Entity
 @Table(name="users")
+
 @Inheritance(strategy = InheritanceType.JOINED)
 
-public class User {
+public  class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
@@ -27,15 +27,6 @@ public class User {
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "role_id", nullable = false)
     private Role role;
-
-
-
-
-
-
-
-
-
 
     // Constructeurs
     public User() {}

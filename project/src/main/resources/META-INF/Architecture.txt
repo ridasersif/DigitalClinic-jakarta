@@ -1,7 +1,7 @@
 DigitalClinic/
 │
 ├── src/main/java/
-│   └── com/digitalclinic/
+│   └── ma/clinique/project
 │       │
 │       ├── model/              # Entités JPA
 │       │   ├── Person.java (abstract)

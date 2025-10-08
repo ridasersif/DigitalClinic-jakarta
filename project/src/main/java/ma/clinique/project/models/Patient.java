@@ -11,16 +11,24 @@ import java.util.List;
 @PrimaryKeyJoinColumn(name = "user_id")
 
 
-
 public class Patient extends User {
+
     @Column(nullable = true)
     private Float weight;
 
     @Column(nullable = true)
     private Float height;
 
+
+
+
     @OneToMany(mappedBy = "patient", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Appointment> appointments = new ArrayList<>();
+
+
+
+
+
 
     // Constructeurs
     public Patient() {

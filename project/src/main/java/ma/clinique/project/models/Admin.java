@@ -7,7 +7,6 @@ import jakarta.persistence.*;
 @PrimaryKeyJoinColumn(name = "user_id")
 public class Admin extends User {
 
-    // Constructeurs
     public Admin() {
         super();
     }
