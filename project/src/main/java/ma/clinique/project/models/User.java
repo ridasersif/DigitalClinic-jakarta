@@ -27,6 +27,16 @@ public class User {
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "role_id", nullable = false)
     private Role role;
+
+
+
+
+
+
+
+
+
+
     // Constructeurs
     public User() {}
 
@@ -37,7 +47,6 @@ public class User {
         this.password = password;
         this.role = role;
     }
-
 
     // Getters et Setters
     public Integer getId() {
