@@ -1,88 +1,94 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
-<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ page import="ma.clinique.project.models.User" %>
+<%
+    HttpSession currentSession = request.getSession(false);
+    User currentUser = null;
+    String role = null;
 
-<header class="main-header">
-    <nav class="navbar">
-        <div class="navbar-brand">
-            <i class="fas fa-hospital"></i>
-            <span>DigitalClinic</span>
-        </div>
+    if (currentSession != null) {
+        currentUser = (User) currentSession.getAttribute("currentUser");
+        Object roleObj = currentSession.getAttribute("role");
+        role = (roleObj != null) ? roleObj.toString() : null;
+    }
+%>
 
-        <div class="navbar-menu">
-            <c:choose>
-                <%-- Patient Navigation --%>
-                <c:when test="${sessionScope.userRole == 'PATIENT'}">
-                    <a href="${pageContext.request.contextPath}/patient/dashboard">
-                        <i class="fas fa-home"></i> Tableau de bord
-                    </a>
-                    <a href="${pageContext.request.contextPath}/patient/doctors">
-                        <i class="fas fa-user-doctor"></i> Médecins
-                    </a>
-                    <a href="${pageContext.request.contextPath}/patient/appointments">
-                        <i class="fas fa-calendar-check"></i> Mes Rendez-vous
-                    </a>
-                    <a href="${pageContext.request.contextPath}/patient/history">
-                        <i class="fas fa-history"></i> Historique
-                    </a>
-                </c:when>
+<nav class="navbar navbar-expand-lg navbar-dark bg-primary shadow-sm">
+    <div class="container">
+        <a class="navbar-brand fw-bold" href="<%= request.getContextPath() %>/index.jsp">
+            <i class="fas fa-heartbeat me-2"></i>Clinique Privée
+        </a>
 
-                <%-- Doctor Navigation --%>
-                <c:when test="${sessionScope.userRole == 'DOCTOR'}">
-                    <a href="${pageContext.request.contextPath}/doctor/dashboard">
-                        <i class="fas fa-home"></i> Tableau de bord
-                    </a>
-                    <a href="${pageContext.request.contextPath}/doctor/planning">
-                        <i class="fas fa-calendar-alt"></i> Planning
-                    </a>
-                    <a href="${pageContext.request.contextPath}/doctor/appointments">
-                        <i class="fas fa-calendar-check"></i> Rendez-vous
-                    </a>
-                    <a href="${pageContext.request.contextPath}/doctor/consultation">
-                        <i class="fas fa-stethoscope"></i> Consultations
-                    </a>
-                </c:when>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+            <span class="navbar-toggler-icon"></span>
+        </button>
 
-                <%-- Admin Navigation --%>
-                <c:when test="${sessionScope.userRole == 'ADMIN'}">
-                    <a href="${pageContext.request.contextPath}/admin/dashboard">
-                        <i class="fas fa-home"></i> Tableau de bord
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav me-auto">
+                <li class="nav-item">
+                    <a class="nav-link" href="<%= request.getContextPath() %>/index.jsp">
+                        <i class="fas fa-home me-1"></i>Accueil
                     </a>
-                    <a href="${pageContext.request.contextPath}/admin/departments">
-                        <i class="fas fa-building"></i> Départements
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="<%= request.getContextPath() %>/patient/doctors-list">
+                        <i class="fas fa-user-md me-1"></i>Docteurs
                     </a>
-                    <a href="${pageContext.request.contextPath}/admin/doctors">
-                        <i class="fas fa-user-doctor"></i> Médecins
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="<%= request.getContextPath() %>/patient/book-appointment">
+                        <i class="fas fa-calendar-plus me-1"></i>Prendre RDV
                     </a>
-                    <a href="${pageContext.request.contextPath}/admin/rooms">
-                        <i class="fas fa-door-open"></i> Salles
-                    </a>
-                    <a href="${pageContext.request.contextPath}/admin/appointments">
-                        <i class="fas fa-calendar"></i> Rendez-vous
-                    </a>
-                    <a href="${pageContext.request.contextPath}/admin/statistics">
-                        <i class="fas fa-chart-bar"></i> Statistiques
-                    </a>
-                </c:when>
-            </c:choose>
-        </div>
+                </li>
+            </ul>
 
-        <c:if test="${sessionScope.user != null}">
-            <div class="user-menu">
-                <div class="user-info">
-                    <div class="user-avatar">
-                            ${sessionScope.user.firstName.substring(0,1)}${sessionScope.user.lastName.substring(0,1)}
-                    </div>
-                    <div>
-                        <div style="font-weight: 600;">${sessionScope.user.firstName} ${sessionScope.user.lastName}</div>
-                        <div style="font-size: 0.875rem; color: #6b7280;">${sessionScope.userRole}</div>
-                    </div>
+            <div class="navbar-nav">
+                <% if (currentUser == null) { %>
+                <!-- 🔹 Avant login -->
+                <a href="<%= request.getContextPath() %>/auth/login" class="btn btn-outline-light me-2">
+                    <i class="fas fa-sign-in-alt me-1"></i>Connexion
+                </a>
+                <a href="<%= request.getContextPath() %>/auth/register" class="btn btn-light text-primary">
+                    <i class="fas fa-user-plus me-1"></i>Inscription
+                </a>
+                <% } else { %>
+                <!-- 🔹 Après login -->
+                <%
+                    String dashboardLink = "#";
+                    if ("ADMIN".equalsIgnoreCase(role)) {
+                        dashboardLink = request.getContextPath() + "/admin/dashboard";
+                    } else if ("DOCTOR".equalsIgnoreCase(role)) {
+                        dashboardLink = request.getContextPath() + "/doctor/dashboard";
+                    } else if ("PATIENT".equalsIgnoreCase(role)) {
+                        dashboardLink = request.getContextPath() + "/patient/dashboard";
+                    }
+                %>
+
+                <a href="<%= dashboardLink %>" class="btn btn-light text-primary me-3">
+                    <i class="fas fa-tachometer-alt me-1"></i>Dashboard
+                </a>
+
+                <!-- 🟢 Profile Dropdown -->
+                <div class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle d-flex align-items-center" href="#" role="button" data-bs-toggle="dropdown">
+                        <div class="rounded-circle bg-light text-primary d-flex align-items-center justify-content-center" style="width: 35px; height: 35px;">
+                            <i class="fas fa-user"></i>
+                        </div>
+                    </a>
+                    <ul class="dropdown-menu dropdown-menu-end">
+                        <li class="dropdown-header text-center fw-bold">
+                            <%= currentUser.getFirstName() + " " + currentUser.getLastName() %>
+                        </li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li><a class="dropdown-item" href="<%= request.getContextPath() %>/profile">
+                            <i class="fas fa-user-circle me-2"></i>Mon Profil
+                        </a></li>
+                        <li><a class="dropdown-item text-danger" href="<%= request.getContextPath() %>/auth/logout">
+                            <i class="fas fa-sign-out-alt me-2"></i>Déconnexion
+                        </a></li>
+                    </ul>
                 </div>
-                <form action="${pageContext.request.contextPath}/logout" method="post" style="display: inline;">
-                    <button type="submit" class="btn-logout">
-                        <i class="fas fa-sign-out-alt"></i> Déconnexion
-                    </button>
-                </form>
+                <% } %>
             </div>
-        </c:if>
-    </nav>
-</header>
+        </div>
+    </div>
+</nav>
