@@ -8,6 +8,7 @@ import java.util.List;
 @Entity
 @Table(name = "departments")
 public class Department {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
@@ -15,7 +16,12 @@ public class Department {
     @Column(nullable = false, unique = true, length = 100)
     private String name;
 
-    @OneToMany(mappedBy = "department", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @Column(length = 255)
+    private String description;
+
+    @OneToMany(mappedBy = "department",
+            cascade = CascadeType.ALL,
+            fetch = FetchType.LAZY)
     private List<Doctor> doctors = new ArrayList<>();
 
     // Constructeurs
@@ -23,6 +29,11 @@ public class Department {
 
     public Department(String name) {
         this.name = name;
+    }
+
+    public Department(String name, String description) {
+        this.name = name;
+        this.description = description;
     }
 
     // Getters et Setters
@@ -40,6 +51,14 @@ public class Department {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
     }
 
     public List<Doctor> getDoctors() {
@@ -62,6 +81,9 @@ public class Department {
 
     @Override
     public String toString() {
-        return "Department{id=" + id + ", name='" + name + "', doctorsCount=" + doctors.size() + "}";
+        return "Department{id=" + id +
+                ", name='" + name + '\'' +
+                ", description='" + description + '\'' +
+                ", doctorsCount=" + doctors.size() + "}";
     }
 }
