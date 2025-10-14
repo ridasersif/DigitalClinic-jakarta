@@ -148,14 +148,6 @@ DigitalClinic/
 │   │           ├── 404.jsp
 │   │           └── 500.jsp
 │   │
-│   ├── assets/
-│   │   ├── css/
-│   │   │   └── style.css
-│   │   ├── js/
-│   │   │   ├── main.js
-│   │   │   └── validation.js
-│   │   └── images/
-│   │
 │   └── index.jsp              # Page d'accueil
 │
 ├── src/test/java/
