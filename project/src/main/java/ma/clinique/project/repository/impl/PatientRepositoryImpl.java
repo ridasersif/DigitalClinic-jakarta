@@ -3,11 +3,9 @@ package ma.clinique.project.repository.impl;
 
 import ma.clinique.project.models.Patient;
 import ma.clinique.project.repository.interfaces.IPatientRepository;
-import ma.clinique.project.utils.JPAUtil;
 
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityTransaction;
-import java.util.List;
 
 public class PatientRepositoryImpl implements IPatientRepository {
     private EntityManager em;
@@ -27,7 +25,14 @@ public class PatientRepositoryImpl implements IPatientRepository {
             e.printStackTrace();
         }
     }
+
+
+
+
+
 }
+
+
 
 
 
