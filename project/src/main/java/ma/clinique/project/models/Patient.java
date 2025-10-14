@@ -10,7 +10,6 @@ import java.util.List;
 @Table(name = "patients")
 @PrimaryKeyJoinColumn(name = "user_id")
 
-
 public class Patient extends User {
 
     @Column(nullable = true)
@@ -20,9 +19,9 @@ public class Patient extends User {
     private Float height;
 
 
-
-
-    @OneToMany(mappedBy = "patient", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "patient",
+            cascade = CascadeType.ALL,
+            fetch = FetchType.LAZY)
     private List<Appointment> appointments = new ArrayList<>();
 
 
