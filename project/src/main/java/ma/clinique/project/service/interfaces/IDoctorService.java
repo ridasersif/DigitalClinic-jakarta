@@ -12,7 +12,7 @@ public interface IDoctorService {
 
     boolean delete(User currentUser, Integer id);
 
-    Doctor findById(User currentUser, Integer id);
+    Doctor findById(Integer id);
 
     List<Doctor> findAll();
 
