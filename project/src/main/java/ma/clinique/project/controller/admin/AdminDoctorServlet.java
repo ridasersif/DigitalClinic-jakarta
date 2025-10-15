@@ -111,7 +111,7 @@ public class AdminDoctorServlet extends HttpServlet {
 
     private void editDoctor(HttpServletRequest request, User currentUser) {
         Integer id = Integer.parseInt(request.getParameter("doctorId"));
-        Doctor doctor = doctorService.findById(currentUser, id);
+        Doctor doctor = doctorService.findById(id);
 
         String firstName = request.getParameter("firstName");
         String lastName = request.getParameter("lastName");
