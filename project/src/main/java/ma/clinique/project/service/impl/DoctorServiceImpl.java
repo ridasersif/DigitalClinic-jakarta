@@ -18,13 +18,16 @@ import java.util.List;
 public class DoctorServiceImpl implements IDoctorService {
 
     private final DoctorRepositoryImpl doctorRepo;
-    private final RoleRepositoryImpl roleRepo;
-    private final DepartmentRepositoryImpl departmentRepo;
+    private  RoleRepositoryImpl roleRepo;
+    private  DepartmentRepositoryImpl departmentRepo;
 
     public DoctorServiceImpl(DoctorRepositoryImpl doctorRepo, RoleRepositoryImpl roleRepo, DepartmentRepositoryImpl departmentRepo) {
         this.doctorRepo = doctorRepo;
         this.roleRepo = roleRepo;
         this.departmentRepo = departmentRepo;
+    }
+    public DoctorServiceImpl(DoctorRepositoryImpl doctorRepo) {
+        this.doctorRepo = doctorRepo;
     }
 
     private void checkAdmin(User currentUser) {
@@ -143,15 +146,13 @@ public class DoctorServiceImpl implements IDoctorService {
     }
 
     @Override
-    public Doctor findById(User currentUser, Integer id) {
-        checkAdmin(currentUser);
+    public Doctor findById(Integer id) {
         Doctor doctor = doctorRepo.findById(id);
         if (doctor == null) {
             throw new IllegalArgumentException("Aucun docteur trouvé avec cet ID !");
         }
         return doctor;
     }
-
     @Override
     public List<Doctor> findAll() {
         return doctorRepo.findAll();
