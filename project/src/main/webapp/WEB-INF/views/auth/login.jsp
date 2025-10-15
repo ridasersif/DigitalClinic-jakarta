@@ -29,7 +29,7 @@
             width: 100%;
         }
 
-        /* 🔹 Header أصغر وبسيط */
+
         .auth-header {
             background: linear-gradient(135deg, #6a11cb, #2575fc);
             color: #fff;
@@ -49,7 +49,7 @@
             opacity: 0.9;
         }
 
-        /* 🔹 جسم الفورم */
+
         .auth-body {
             padding: 1.8rem;
         }
