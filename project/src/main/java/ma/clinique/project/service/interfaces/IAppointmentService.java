@@ -1,32 +1,18 @@
 package ma.clinique.project.service.interfaces;
 
 import ma.clinique.project.models.Appointment;
-import ma.clinique.project.models.Doctor;
-import ma.clinique.project.models.Patient;
-import ma.clinique.project.models.Room;
-
-import java.time.LocalDate;
-import java.time.LocalTime;
+import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Map;
 
 public interface IAppointmentService {
-
-    boolean createAppointment(Patient patient, Doctor doctor, Room room,
-                              LocalDate date, LocalTime time) throws Exception;
-
-    boolean updateAppointment(Appointment appointment) throws Exception;
-
-    boolean cancelAppointment(Integer appointmentId) throws Exception;
-
-    boolean validateAppointment(Integer appointmentId, Doctor doctor) throws Exception;
-
-    boolean completeAppointment(Integer appointmentId, String report, Doctor doctor) throws Exception;
-
-    List<Appointment> getAppointmentsByDoctor(Integer doctorId);
-
-    List<Appointment> getAppointmentsByPatient(Integer patientId);
-
-    List<Appointment> getAllAppointments();
-
-    Appointment findAppointmentById(Integer appointmentId);
+    boolean createAppointment(Appointment appointment);
+    boolean updateAppointment(Appointment appointment);
+    boolean deleteAppointment(Integer id);
+    Appointment findById(Integer appointmentId);
+    List<Appointment> findAll();
+    boolean isDoctorAvailable(Integer doctorId, LocalDateTime dateTime);
+    boolean isRoomAvailable(Integer roomId, LocalDateTime dateTime);
+    boolean isPatientAvailable(Integer patientId, LocalDateTime dateTime);
+    List<LocalDateTime> getAvailableSlots(Integer doctorId, LocalDateTime startDate);
 }
