@@ -1,8 +1,8 @@
-
 package ma.clinique.project.models;
 
 import jakarta.persistence.*;
 import ma.clinique.project.models.enums.AppointmentStatus;
+
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.LocalDateTime;
@@ -31,6 +31,12 @@ public class Appointment {
     @Column(columnDefinition = "TEXT")
     private String report;
 
+    @Column(columnDefinition = "TEXT")
+    private String reason;
+
+    @Column(name = "created_at", nullable = false)
+    private LocalDateTime createdAt;
+
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "patient_id", nullable = false)
     private Patient patient;
@@ -43,20 +49,23 @@ public class Appointment {
     @JoinColumn(name = "room_id", nullable = false)
     private Room room;
 
-    // Constructeurs
+    // Constructors
     public Appointment() {}
 
     public Appointment(LocalDate appointmentDate, LocalTime appointmentTime,
-                       AppointmentStatus status, Patient patient, Doctor doctor, Room room) {
+                       AppointmentStatus status, Patient patient, Doctor doctor, Room room,
+                       String reason, LocalDateTime createdAt) {
         this.appointmentDate = appointmentDate;
         this.appointmentTime = appointmentTime;
         this.status = status;
         this.patient = patient;
         this.doctor = doctor;
         this.room = room;
+        this.reason = reason;
+        this.createdAt = createdAt;
     }
 
-    // Getters et Setters
+    // Getters & Setters
     public Integer getId() {
         return id;
     }
@@ -97,6 +106,22 @@ public class Appointment {
         this.report = report;
     }
 
+    public String getReason() {
+        return reason;
+    }
+
+    public void setReason(String reason) {
+        this.reason = reason;
+    }
+
+    public LocalDateTime getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(LocalDateTime createdAt) {
+        this.createdAt = createdAt;
+    }
+
     public Patient getPatient() {
         return patient;
     }
@@ -121,7 +146,11 @@ public class Appointment {
         this.room = room;
     }
 
-    // Méthodes utilitaires
+    public void setAppointmentDateTime(LocalDateTime dateTime) {
+        this.appointmentDate = dateTime.toLocalDate();
+        this.appointmentTime = dateTime.toLocalTime();
+    }
+
     public LocalDateTime getAppointmentDateTime() {
         return LocalDateTime.of(appointmentDate, appointmentTime);
     }
@@ -146,6 +175,9 @@ public class Appointment {
                 ", status=" + status +
                 ", patient=" + (patient != null ? patient.getFullName() : "N/A") +
                 ", doctor=" + (doctor != null ? doctor.getFullName() : "N/A") +
-                ", room=" + (room != null ? room.getName() : "N/A") + "}";
+                ", room=" + (room != null ? room.getName() : "N/A") +
+                ", reason=" + reason +
+                ", createdAt=" + createdAt +
+                "}";
     }
 }
