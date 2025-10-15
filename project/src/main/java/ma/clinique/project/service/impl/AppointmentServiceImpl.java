@@ -1,18 +1,17 @@
 package ma.clinique.project.service.impl;
 
 import ma.clinique.project.models.Appointment;
-import ma.clinique.project.models.Doctor;
-import ma.clinique.project.models.Patient;
-import ma.clinique.project.models.Room;
 import ma.clinique.project.models.enums.AppointmentStatus;
 import ma.clinique.project.repository.interfaces.IAppointmentRepository;
 import ma.clinique.project.service.interfaces.IAppointmentService;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
+import java.util.Map;
+import java.util.HashMap;
 
 public class AppointmentServiceImpl implements IAppointmentService {
 
@@ -23,107 +22,108 @@ public class AppointmentServiceImpl implements IAppointmentService {
     }
 
     @Override
-    public boolean createAppointment(Patient patient, Doctor doctor, Room room, LocalDate date, LocalTime time) throws Exception {
-        LocalDateTime dateTime = LocalDateTime.of(date, time);
-
-        // Vérifier disponibilité patient, doctor, room
-        if (appointmentRepository.findAll().stream().anyMatch(a ->
-                a.getPatient().getId().equals(patient.getId()) &&
-                        a.getAppointmentDateTime().equals(dateTime))) {
-            throw new Exception("Patient already has an appointment at this time.");
+    public boolean createAppointment(Appointment appointment){
+        if(!isDoctorAvailable(appointment.getDoctor().getId(), appointment.getAppointmentDateTime())){
+            System.out.println("Doctor not available at this time.");
+            return false;
         }
-
-        if (appointmentRepository.findAll().stream().anyMatch(a ->
-                a.getDoctor().getId().equals(doctor.getId()) &&
-                        a.getAppointmentDateTime().equals(dateTime))) {
-            throw new Exception("Doctor is not available at this time.");
+        // CHANGEMENT: Support pour room optionnelle
+        if(appointment.getRoom() != null && !isRoomAvailable(appointment.getRoom().getId(), appointment.getAppointmentDateTime())){
+            System.out.println("Room not available at this time.");
+            return false;
         }
-
-        if (appointmentRepository.findAll().stream().anyMatch(a ->
-                a.getRoom().getId().equals(room.getId()) &&
-                        a.getAppointmentDateTime().equals(dateTime))) {
-            throw new Exception("Room is already booked at this time.");
-        }
-
-        Appointment appointment = new Appointment(date, time, AppointmentStatus.RESERVED,
-                patient, doctor, room);
-
         return appointmentRepository.create(appointment);
     }
 
     @Override
-    public boolean updateAppointment(Appointment appointment) throws Exception {
-        Appointment existing = appointmentRepository.findById(appointment.getId());
-        if (existing == null)
-            throw new Exception("Appointment not found.");
-
-        if (existing.getStatus() == AppointmentStatus.COMPLETED ||
-                existing.getStatus() == AppointmentStatus.CANCELLED)
-            throw new Exception("Cannot modify completed or cancelled appointment.");
-
+    public boolean updateAppointment(Appointment appointment) {
         return appointmentRepository.update(appointment);
     }
 
     @Override
-    public boolean cancelAppointment(Integer appointmentId) throws Exception {
-        Appointment appointment = appointmentRepository.findById(appointmentId);
-        if (appointment == null) throw new Exception("Appointment not found.");
-
-        appointment.setStatus(AppointmentStatus.CANCELLED);
-        return appointmentRepository.update(appointment);
+    public boolean deleteAppointment(Integer id) {
+        Appointment appointment = appointmentRepository.findById(id);
+        if (appointment == null) {
+            System.out.println("Appointment not found.");
+            return false;
+        }
+        return appointmentRepository.delete(id);
     }
 
     @Override
-    public boolean validateAppointment(Integer appointmentId, Doctor doctor) throws Exception {
-        Appointment appointment = appointmentRepository.findById(appointmentId);
-        if (appointment == null) throw new Exception("Appointment not found.");
-
-        if (!appointment.getDoctor().getId().equals(doctor.getId()))
-            throw new Exception("Doctor not authorized.");
-
-        appointment.setStatus(AppointmentStatus.VALIDATED);
-        return appointmentRepository.update(appointment);
+    public Appointment findById(Integer appointmentId) {
+        return appointmentRepository.findById(appointmentId);
     }
 
     @Override
-    public boolean completeAppointment(Integer appointmentId, String report, Doctor doctor) throws Exception {
-        Appointment appointment = appointmentRepository.findById(appointmentId);
-        if (appointment == null) throw new Exception("Appointment not found.");
-
-        if (!appointment.getDoctor().getId().equals(doctor.getId()))
-            throw new Exception("Doctor not authorized.");
-
-        if (appointment.getStatus() != AppointmentStatus.VALIDATED)
-            throw new Exception("Appointment must be validated first.");
-
-        appointment.setReport(report);
-        appointment.setStatus(AppointmentStatus.COMPLETED);
-        return appointmentRepository.update(appointment);
-    }
-
-    @Override
-    public List<Appointment> getAppointmentsByDoctor(Integer doctorId) {
-        return appointmentRepository.findAll()
-                .stream()
-                .filter(a -> a.getDoctor().getId().equals(doctorId))
-                .collect(Collectors.toList());
-    }
-
-    @Override
-    public List<Appointment> getAppointmentsByPatient(Integer patientId) {
-        return appointmentRepository.findAll()
-                .stream()
-                .filter(a -> a.getPatient().getId().equals(patientId))
-                .collect(Collectors.toList());
-    }
-
-    @Override
-    public List<Appointment> getAllAppointments() {
+    public List<Appointment> findAll() {
         return appointmentRepository.findAll();
     }
 
     @Override
-    public Appointment findAppointmentById(Integer appointmentId) {
-        return appointmentRepository.findById(appointmentId);
+    public boolean isDoctorAvailable(Integer doctorId, LocalDateTime dateTime) {
+        List<Appointment> all = appointmentRepository.findAll();
+        for (Appointment a : all) {
+            if (a.getDoctor().getId().equals(doctorId)
+                    && a.getAppointmentDateTime().equals(dateTime)
+                    && a.getStatus() != AppointmentStatus.CANCELLED) {
+                return false;
+            }
+        }
+        return true;
     }
+
+    @Override
+    public boolean isRoomAvailable(Integer roomId, LocalDateTime dateTime) {
+        List<Appointment> all = appointmentRepository.findAll();
+        for (Appointment a : all) {
+            // CHANGEMENT: Vérifier si room != null
+            if (a.getRoom() != null
+                    && a.getRoom().getId().equals(roomId)
+                    && a.getAppointmentDateTime().equals(dateTime)
+                    && a.getStatus() != AppointmentStatus.CANCELLED) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    @Override
+    public boolean isPatientAvailable(Integer patientId, LocalDateTime dateTime) {
+        List<Appointment> all = appointmentRepository.findAll();
+        for (Appointment a : all) {
+            if (a.getPatient().getId().equals(patientId)
+                    && a.getAppointmentDateTime().equals(dateTime)
+                    && a.getStatus() != AppointmentStatus.CANCELLED) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    @Override
+    public List<LocalDateTime> getAvailableSlots(Integer doctorId, LocalDateTime startDate){
+        List<LocalDateTime> slots = new ArrayList<>();
+        LocalTime workStart = LocalTime.of(8, 0);
+        LocalTime workEnd = LocalTime.of(22, 0);
+
+        // CHANGEMENT: Générer les créneaux pour 30 jours (au lieu d'un seul jour)
+        LocalDate currentDate = startDate.toLocalDate();
+        LocalDate endDate = currentDate.plusDays(30);
+
+        while(!currentDate.isAfter(endDate)) {
+            for(LocalTime time = workStart; time.isBefore(workEnd); time = time.plusMinutes(30)){
+                LocalDateTime dateTime = LocalDateTime.of(currentDate, time);
+
+                // CHANGEMENT: Afficher seulement les créneaux futurs
+                if(dateTime.isAfter(LocalDateTime.now())) {
+                    slots.add(dateTime);
+                }
+            }
+            currentDate = currentDate.plusDays(1);
+        }
+
+        return slots;
+    }
+
 }
