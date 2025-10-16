@@ -16,7 +16,6 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.*;
 
-
 @WebServlet("/patient/book-appointment")
 public class BookAppointmentServlet extends HttpServlet {
     private EntityManager em;
@@ -39,10 +38,9 @@ public class BookAppointmentServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-
         HttpSession session = request.getSession(false);
         if (session == null || session.getAttribute("currentUser") == null) {
-            response.sendRedirect(request.getContextPath() + "/auth/login.jsp");
+            response.sendRedirect(request.getContextPath() + "/auth/login");
             return;
         }
 
@@ -57,30 +55,16 @@ public class BookAppointmentServlet extends HttpServlet {
 
         // Filtrage selon docteur et date
         String doctorIdStr = request.getParameter("doctorId");
-        String dateStr = request.getParameter("appointmentDate");
+        String appointmentDateDay = request.getParameter("appointmentDate");
 
         if (doctorIdStr != null && !doctorIdStr.isEmpty()) {
             Integer doctorId = Integer.parseInt(doctorIdStr);
             request.setAttribute("selectedDoctorId", doctorId);
 
             List<LocalDateTime> allSlots = appointmentService.getAvailableSlots(doctorId, LocalDateTime.now());
-            List<LocalDateTime> availableSlots = new ArrayList<>();
-
-            for (LocalDateTime slot : allSlots) {
-                if (appointmentService.isDoctorAvailable(doctorId, slot)) {
-                    if (dateStr != null && !dateStr.isEmpty()) {
-                        LocalDate selectedDate = LocalDate.parse(dateStr);
-                        if (slot.toLocalDate().equals(selectedDate)) {
-                            availableSlots.add(slot);
-                        }
-                    } else {
-                        availableSlots.add(slot);
-                    }
-                }
-            }
-
+            List<LocalDateTime> availableSlots = appointmentService.filterAvailableSlots(allSlots, doctorId, appointmentDateDay);
             request.setAttribute("slots", availableSlots);
-            request.setAttribute("selectedDate", dateStr);
+            request.setAttribute("selectedDate", appointmentDateDay);
         }
 
         request.getRequestDispatcher("/WEB-INF/views/patient/book-appointment.jsp")
@@ -93,7 +77,7 @@ public class BookAppointmentServlet extends HttpServlet {
 
         HttpSession session = request.getSession(false);
         if (session == null || session.getAttribute("currentUser") == null) {
-            response.sendRedirect(request.getContextPath() + "/auth/login.jsp");
+            response.sendRedirect(request.getContextPath() + "/auth/login");
             return;
         }
 
@@ -135,12 +119,13 @@ public class BookAppointmentServlet extends HttpServlet {
         boolean success = appointmentService.createAppointment(appointment);
 
         if (success) {
-            request.setAttribute("success", "Rendez-vous réservé avec succès !");
+            response.sendRedirect(request.getContextPath() + "/patient/my-appointments?success=Rendez-vous réservé avec succès !");
         } else {
+
             request.setAttribute("error", "Créneau non disponible.");
+            request.setAttribute("selectedDoctorId", doctorId);
+            request.setAttribute("selectedDate", appointmentDateTime.toLocalDate().toString());
+            doGet(request, response);
         }
-        request.setAttribute("selectedDoctorId", doctorId);
-        request.setAttribute("selectedDate", appointmentDateTime.toLocalDate().toString());
-        doGet(request, response);
     }
 }
