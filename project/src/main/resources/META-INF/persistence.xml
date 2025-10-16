@@ -8,7 +8,7 @@
             <property name="jakarta.persistence.jdbc.driver"
                       value="com.mysql.cj.jdbc.Driver"/>
             <property name="jakarta.persistence.jdbc.url"
-                      value="jdbc:mysql://localhost:3306/clinique_db?createDatabaseIfNotExist=true"/>
+                      value="jdbc:mysql://localhost:3306/DigitalClinic-db?createDatabaseIfNotExist=true"/>
             <property name="jakarta.persistence.jdbc.user"
                       value="root"/>
             <property name="jakarta.persistence.jdbc.password"
