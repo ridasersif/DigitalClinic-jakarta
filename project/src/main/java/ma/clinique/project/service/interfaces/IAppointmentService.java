@@ -15,4 +15,9 @@ public interface IAppointmentService {
     boolean isRoomAvailable(Integer roomId, LocalDateTime dateTime);
     boolean isPatientAvailable(Integer patientId, LocalDateTime dateTime);
     List<LocalDateTime> getAvailableSlots(Integer doctorId, LocalDateTime startDate);
+    List<LocalDateTime> filterAvailableSlots(List<LocalDateTime> allSlots , Integer doctorId,String appointmentDateDay);
+    List<Appointment> findAllAppointmentsByPatientId(Integer patientId);
+    List<Appointment> findAllAppointmentsByDoctorId(Integer doctorId);
+    void cancelAppointment(Integer id);
+
 }
