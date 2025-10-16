@@ -73,6 +73,8 @@ public class RegisterPatientServlet extends HttpServlet {
             session.setAttribute("currentUser", patient);
             session.setAttribute("role",patient.getRole().getRoleName());
 
+            System.out.println("Registered patient: " + patient);
+
             response.sendRedirect(request.getContextPath() + "/");
         } catch (IllegalArgumentException e) {
             request.setAttribute("errorMessage", e.getMessage());
