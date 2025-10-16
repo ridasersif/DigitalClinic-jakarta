@@ -17,7 +17,7 @@
                         Prenez rendez-vous en ligne et bénéficiez de soins personnalisés dans un environnement moderne.
                     </p>
                     <div class="d-flex gap-3 flex-wrap">
-                        <a href="auth/register.jsp" class="btn btn-primary btn-lg px-4 py-3">
+                        <a href="${pageContext.request.contextPath}/patient/book-appointment?action=book" class="btn btn-primary btn-lg px-4 py-3">
                             <i class="fas fa-calendar-plus me-2"></i>Prendre Rendez-vous
                         </a>
                         <a href="patient/doctors-list.jsp" class="btn btn-outline-primary btn-lg px-4 py-3">
