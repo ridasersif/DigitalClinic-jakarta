@@ -84,7 +84,7 @@
                     </div>
                     <span class="sidebar-text">Accueil public</span>
                 </a>
-                <a class="nav-link sidebar-link text-danger" href="../auth/login.jsp">
+                <a class="nav-link sidebar-link text-danger" href="${pageContext.request.contextPath}/auth/logout">
                     <div class="sidebar-icon">
                         <i class="fas fa-sign-out-alt"></i>
                     </div>
