@@ -10,7 +10,7 @@ public class DoctorConsultationsServlet extends HttpServlet {
     @Override
     protected void doGet(jakarta.servlet.http.HttpServletRequest request, jakarta.servlet.http.HttpServletResponse response)
             throws jakarta.servlet.ServletException, java.io.IOException {
-        System.out.println("DoctorConsultationsServlet accessed");
+        System.out.println("Accessing Doctor Consultations Servlet");
         request.getRequestDispatcher("/WEB-INF/views/doctor/consultation.jsp").forward(request, response);
     }
 }
