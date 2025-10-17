@@ -15,8 +15,10 @@ public interface IAppointmentRepository {
         List<Appointment> findByRoomAndDate(Integer roomId, LocalDate date);
         List<Appointment> findByPatientAndDate(Integer patientId, LocalDate date);
         List<Appointment> findAllAppointmentsByPatientId(Integer patientId);
+        List<Appointment> findAllAppointmentsByDoctorIdAndByStatus(Integer doctorId, String status);
+        void changeAppointmentStatus(Integer id, String status);
         List<Appointment> findAllAppointmentsByDoctorId(Integer doctorId);
-        void cancelAppointment(Integer id);
+        List<Appointment> findTodayAppointmentsByDoctorId(Integer doctorId);
 
 
 }
