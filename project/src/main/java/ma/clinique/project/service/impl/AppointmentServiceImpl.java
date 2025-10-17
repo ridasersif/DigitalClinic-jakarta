@@ -54,6 +54,7 @@ public class AppointmentServiceImpl implements IAppointmentService {
         return appointmentRepository.delete(id);
     }
 
+
     @Override
     public Appointment findById(Integer appointmentId) {
         return appointmentRepository.findById(appointmentId);
@@ -162,8 +163,8 @@ public class AppointmentServiceImpl implements IAppointmentService {
     }
 
     @Override
-    public List<Appointment> findAllAppointmentsByDoctorId(Integer doctorId) {
-        return appointmentRepository.findAllAppointmentsByDoctorId(doctorId);
+    public List<Appointment> findAllAppointmentsByDoctorIdAndByStatus(Integer doctorId,String status) {
+        return appointmentRepository.findAllAppointmentsByDoctorIdAndByStatus(doctorId,status);
     }
 
     @Override
@@ -171,10 +172,18 @@ public class AppointmentServiceImpl implements IAppointmentService {
         return appointmentRepository.findAllAppointmentsByPatientId(patientId);
     }
 
+    @Override
+    public void changeAppointmentStatus(Integer id, String status) {
+        appointmentRepository.changeAppointmentStatus(id, status);
+    }
+    @Override
+    public List<Appointment> findTodayAppointmentsByDoctorId(Integer doctorId) {
+        return appointmentRepository.findTodayAppointmentsByDoctorId(doctorId);
+    }
 
     @Override
-    public void cancelAppointment(Integer id) {
-        appointmentRepository.cancelAppointment(id);
+    public List<Appointment> findAllAppointmentsByDoctorId(Integer doctorId) {
+        return appointmentRepository.findAllAppointmentsByDoctorId(doctorId);
     }
 
 }
