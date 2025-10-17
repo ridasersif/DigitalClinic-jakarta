@@ -746,9 +746,21 @@
                                                     </div>
                                                 </td>
                                                 <td>
-                                                        <span class="status-badge status-cancelled">
-                                                            Annulée
-                                                        </span>
+                                                    <c:choose>
+                                                        <c:when test="${appointment.status.name() == 'CANCELLEDBYDOCTOR'}">
+                                                            <span class="badge bg-dark">
+                                                                <i class="fas fa-user-md me-1"></i>Annulé par docteur
+                                                            </span>
+                                                        </c:when>
+                                                        <c:when test="${appointment.status.name() == 'CANCELLED'}">
+                                                            <span class="status-badge status-cancelled">
+                                                                Annulé par moi
+                                                            </span>
+                                                        </c:when>
+                                                        <c:otherwise>
+                                                            <span class="status-badge status-cancelled">Annulé</span>
+                                                        </c:otherwise>
+                                                    </c:choose>
                                                 </td>
                                             </tr>
                                         </c:forEach>
