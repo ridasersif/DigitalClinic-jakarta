@@ -9,7 +9,9 @@ import ma.clinique.project.models.Appointment;
 import ma.clinique.project.models.User;
 import ma.clinique.project.models.enums.AppointmentStatus;
 import ma.clinique.project.repository.impl.AppointmentRepositoryImpl;
+import ma.clinique.project.service.impl.AppointmentServiceImpl;
 import ma.clinique.project.utils.JPAUtil;
+
 
 import java.io.IOException;
 import java.time.LocalDate;
@@ -20,14 +22,16 @@ import java.util.stream.Collectors;
 @WebServlet("/patient/my-appointments")
 public class PatientMyAppointmentsServlet extends HttpServlet {
 
-    private EntityManager em;
-    private AppointmentRepositoryImpl appointmentService;
+    private AppointmentRepositoryImpl appointmentRepo;
+    private AppointmentServiceImpl appointmentService;
 
     @Override
     public void init() {
-        em = JPAUtil.getEntityManager();
-        appointmentService = new AppointmentRepositoryImpl(em);
+        EntityManager em = JPAUtil.getEntityManager();
+        appointmentRepo = new AppointmentRepositoryImpl(em);
+        appointmentService = new AppointmentServiceImpl(appointmentRepo);
     }
+
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
@@ -48,10 +52,10 @@ public class PatientMyAppointmentsServlet extends HttpServlet {
         List<Appointment> upcomingAppointments = appointments.stream()
                 .filter(appointment ->
                         (appointment.getAppointmentDate().isAfter(today)
-                                || (appointment.getAppointmentDate().equals(today)
-                                && appointment.getAppointmentTime().isAfter(now.toLocalTime())))
-                                && (appointment.getStatus() == AppointmentStatus.RESERVED
-                                || appointment.getStatus() == AppointmentStatus.VALIDATED)
+                        || (appointment.getAppointmentDate().equals(today)
+                        && appointment.getAppointmentTime().isAfter(now.toLocalTime())))
+                        && (appointment.getStatus() == AppointmentStatus.RESERVED
+                        || appointment.getStatus() == AppointmentStatus.VALIDATED)
                 )
                 .collect(Collectors.toList());
 
@@ -76,6 +80,7 @@ public class PatientMyAppointmentsServlet extends HttpServlet {
         request.getRequestDispatcher("/WEB-INF/views/patient/my-appointments.jsp").forward(request, response);
     }
 
+
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws IOException {
@@ -83,11 +88,10 @@ public class PatientMyAppointmentsServlet extends HttpServlet {
         String appointmentId = request.getParameter("appointmentId");
 
         if ("cancel".equals(action) && appointmentId != null) {
+            AppointmentStatus status = AppointmentStatus.CANCELLED;
             try {
                 int id = Integer.parseInt(appointmentId);
-
-
-                appointmentService.cancelAppointment(id);
+                appointmentService.changeAppointmentStatus(id,status.name());
 
                 response.sendRedirect(request.getContextPath() + "/patient/my-appointments?success=Rendez-vous annulé avec succès");
             } catch (Exception e) {
