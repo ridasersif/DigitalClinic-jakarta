@@ -4,11 +4,11 @@
     <div class="position-sticky pt-3 h-100 d-flex flex-column">
         <!-- En-tête Sidebar -->
         <div class="sidebar-header text-center py-4 px-3 border-bottom">
-            <div class="bg-gradient-warning rounded-3 p-3 mx-auto mb-3" style="width: 60px; height: 60px;">
+            <div class="bg-gradient-primary rounded-3 p-3 mx-auto mb-3" style="width: 60px; height: 60px;">
                 <i class="fas fa-user-md fa-xl text-white"></i>
             </div>
             <h6 class="fw-bold text-dark mb-1">Clinique Privée</h6>
-            <span class="badge bg-warning-soft text-warning small">Espace Docteur</span>
+            <span class="badge bg-primary-soft text-primary small">Espace Docteur</span>
         </div>
 
         <!-- Navigation Principale -->
@@ -34,7 +34,7 @@
 
             <li class="nav-item">
                 <a class="nav-link sidebar-link ${param.active == 'appointments' ? 'active' : ''}"
-                   href="${pageContext.request.contextPath}/doctor/appointments">
+                   href="${pageContext.request.contextPath}/doctor/appointments?status=VALIDATED">
                     <div class="sidebar-icon">
                         <i class="fas fa-list-alt"></i>
                     </div>
@@ -67,7 +67,7 @@
         <div class="sidebar-footer mt-auto pt-4 border-top">
             <div class="user-info px-3 mb-3">
                 <div class="d-flex align-items-center">
-                    <div class="user-avatar bg-warning text-white rounded-circle d-flex align-items-center justify-content-center me-3" style="width: 40px; height: 40px;">
+                    <div class="user-avatar text-white rounded-circle d-flex align-items-center justify-content-center me-3" style="width: 40px; height: 40px;">
                         <i class="fas fa-user-md"></i>
                     </div>
                     <div class="user-details">
@@ -97,9 +97,9 @@
 
 <style>
     :root {
-        --warning: #f59e0b;
-        --warning-dark: #d97706;
-        --warning-soft: #fef3c7;
+        --primary: #0ea5e9;
+        --primary-dark: #0284c7;
+        --primary-soft: #e0f2fe;
         --sidebar-width: 280px;
     }
 
@@ -126,15 +126,15 @@
     }
 
     .sidebar-link:hover {
-        background-color: var(--warning-soft);
-        color: var(--warning);
+        background-color: var(--primary-soft);
+        color: var(--primary);
         transform: translateX(5px);
     }
 
     .sidebar-link.active {
-        background: linear-gradient(135deg, var(--warning), var(--warning-dark));
+        background: linear-gradient(135deg, var(--primary), var(--primary-dark));
         color: white;
-        box-shadow: 0 4px 12px rgba(245, 158, 11, 0.3);
+        box-shadow: 0 4px 12px rgba(14, 165, 233, 0.3);
     }
 
     .sidebar-icon {
@@ -164,16 +164,16 @@
         flex: 1;
     }
 
-    .bg-gradient-warning {
-        background: linear-gradient(135deg, var(--warning), var(--warning-dark));
+    .bg-gradient-primary {
+        background: linear-gradient(135deg, var(--primary), var(--primary-dark));
     }
 
-    .bg-warning-soft {
-        background-color: var(--warning-soft);
+    .bg-primary-soft {
+        background-color: var(--primary-soft);
     }
 
     .user-avatar {
-        background: linear-gradient(135deg, var(--warning), var(--warning-dark));
+        background: linear-gradient(135deg, var(--primary), var(--primary-dark));
     }
 
     .extra-small {
@@ -193,7 +193,7 @@
 
     /* ✅ Personnalisation du Scrollbar du Sidebar */
     #sidebar::-webkit-scrollbar {
-        width: 10px;
+        width: 8px;
     }
 
     #sidebar::-webkit-scrollbar-track {
@@ -202,13 +202,13 @@
     }
 
     #sidebar::-webkit-scrollbar-thumb {
-        background: linear-gradient(180deg, #f59e0b, #d97706);
+        background: linear-gradient(180deg, var(--primary), var(--primary-dark));
         border-radius: 10px;
         box-shadow: inset 0 0 3px rgba(255,255,255,0.3);
         transition: all 0.3s ease;
     }
 
     #sidebar::-webkit-scrollbar-thumb:hover {
-        background: linear-gradient(180deg, #eab308, #b45309);
+        background: linear-gradient(180deg, var(--primary-dark), #0369a1);
     }
 </style>
