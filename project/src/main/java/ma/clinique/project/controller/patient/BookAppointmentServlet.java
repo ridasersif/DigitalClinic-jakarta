@@ -113,7 +113,7 @@ public class BookAppointmentServlet extends HttpServlet {
 
         appointment.setAppointmentDateTime(appointmentDateTime);
         appointment.setReason(reason);
-        appointment.setStatus(AppointmentStatus.VALIDATED);
+        appointment.setStatus(AppointmentStatus.RESERVED);
         appointment.setCreatedAt(LocalDateTime.now());
 
         boolean success = appointmentService.createAppointment(appointment);
